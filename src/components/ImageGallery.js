@@ -19,13 +19,15 @@ export default function ImageGallery({ searchValue }) {
   const [photographer, setPhotographer] = useState(null);
 
   useEffect(() => {
-    setStatus("pending");
     newPixabayFetch.searchQuery = searchValue;
+    if (searchValue === "") {
+      return;
+    }
+    setStatus("pending");
     newPixabayFetch.resetPage();
     newPixabayFetch
       .searchPhotos()
       .then((searchResults) => {
-        console.log(searchResults);
         setSearchResults(searchResults);
         setStatus("success");
         scrolling();
@@ -44,7 +46,6 @@ export default function ImageGallery({ searchValue }) {
 
   const handleClick = () => {
     newPixabayFetch.page = 1;
-    console.log("page", newPixabayFetch.page);
     newPixabayFetch
       .searchPhotos()
       .then((searchResults) => {
@@ -102,106 +103,4 @@ export default function ImageGallery({ searchValue }) {
       return alert(`Sorry, we have not find such word... Lets try again!`);
     }
   }
-
-  // state = {
-  //   searchResults: [],
-  //   showModal: false,
-  //   status: "init",
-  //   largImg: "",
-  //   photographer:'',
-  // };
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevProps.searchValue !== this.props.searchValue) {
-  //     console.log(`get fetch`);
-  //     this.setState({ status: "pending" });
-  //     newPixabayFetch.resetPage();
-  //     newPixabayFetch.searchQuery = this.props.searchValue; //так как мы обращаемся к сеттеру, то значение мы просто перезаписываем (а не вызываем)
-  //     newPixabayFetch
-  //       .searchPhotos() //сетим значение из searchValue, чтобы вызвать метод searchPhotos
-  //       .then((searchResults) => {
-  //         console.log(searchResults);
-  //         this.setState({ searchResults, status: "success" });
-  //         this.scrolling();
-  //       })
-  //       .catch(() => {
-  //         this.setState({ status: "error" });
-  //       });
-  //   }
-  // }
-
-  // handleClick = () => {
-  //   newPixabayFetch.page = 1;
-  //   console.log("page", newPixabayFetch.page);
-  //   newPixabayFetch
-  //     .searchPhotos()
-  //     .then((searchResults) => {
-  //       this.setState((prev) => ({
-  //         searchResults: [...prev.searchResults, ...searchResults],
-  //         status: "success",
-  //       }));
-  //       this.scrolling();
-  //     })
-  //     .catch(() => {
-  //       this.setState({ status: "error" });
-  //     });
-  // };
-
-  // scrolling = () => {
-  //   window.scrollTo({
-  //     top: document.documentElement.scrollHeight,
-  //     behavior: "smooth",
-  //   });
-  // };
-
-  // closeModal = () => {
-  //   this.setState({ showModal: false });
-  // };
-
-  // openModal = (e) => {
-  //   this.setState({
-  //     showModal: true,
-  //     largImg: e.target.dataset.source,
-  //     photographer: e.target.alt,
-  //   });
-  // };
-
-  // render() {
-  //   const { searchResults, status, showModal } = this.state;
-  //   const { closeModal, handleClick, openModal } = this;
-  //   if (status === "init") {
-  //     return null;
-  //   }
-  //   if (status === "pending") {
-  //     return <LoaderComponent />;
-  //   }
-  //   if (status === "success") {
-  //     return (
-  //       <>
-  //         <ul className="ImageGallery">
-  //           {searchResults.length > 0 &&
-  //             searchResults.map((picture) => {
-  //               return (
-  //                 <ImageGalleryItem
-  //                   key={picture.id}
-  //                   onClick={openModal}
-  //                   pictUrl={picture.webformatURL}
-  //                   photographer={picture.user}
-  //                   largImg={picture.largeImageURL}
-  //                 />
-  //               );
-  //             })}
-  //           {showModal && (
-  //             <Modal onClick={closeModal} largePic={this.state.largImg} alt={this.state.photographer }/>
-  //           )}
-  //         </ul>
-  //         <Button type="button" onClick={handleClick} results={searchResults} />
-  //       </>
-  //     );
-  //   }
-  //   if (status === "error") {
-  //     if (searchResults.length === 0) {
-  //       return alert("Sorry, we have not find such word... Lets try again!");
-  //     }
-  //   }
-  // }
 }

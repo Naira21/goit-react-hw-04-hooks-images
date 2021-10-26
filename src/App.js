@@ -5,7 +5,7 @@ import ImageGallery from "./components/ImageGallery";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
 
   const getSearchValue = (searchValue) => {
     setSearchValue(searchValue);
